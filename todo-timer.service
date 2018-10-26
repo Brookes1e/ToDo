@@ -1,0 +1,7 @@
+[Unit]
+
+[Service]
+ExecStart=/usr/bin/wall -n "hellllloo" 
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=1min timer
+
+[Timer]
+OnUnitActiveSec=900
+Unit=timer-1min.service
+
+[Install]
+WantedBy=basic.target 

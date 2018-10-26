@@ -3,6 +3,7 @@
 import argparse
 import datetime
 import pandas
+import subprocess
 
 
 def main():
@@ -12,7 +13,9 @@ def main():
     cliparser.add_argument("--reminder", "-r", help="Set a reminder for your task")
 
     args = cliparser.parse_args()
-
+    
+    subprocess.check_output(['systemctl', 'restart', 'todo-timer.timer']) 
+    
 
 class Task():
     def __init__(self):
@@ -21,5 +24,5 @@ class Task():
         self.reminder = args.reminder
 
 
-if __name__ == "__main__.py":
+if __name__ == "__main__":
     main()
