@@ -1,5 +1,7 @@
 # Package specific files
 tasks.pkl
+todo.sublime-project
+todo.sublime-workspace
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
