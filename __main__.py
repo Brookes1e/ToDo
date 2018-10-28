@@ -5,6 +5,8 @@ import datetime
 import subprocess
 import pickle
 import os.path
+import regex
+import pdb
 
 storageFile = "./tasks.pkl"
 
@@ -31,7 +33,6 @@ class ManageTasks():
     def __init__(self,task):
         self.db = []
         self.opendb()
-        print self.db
         self.task = task
         self.actionSwitch()
 
@@ -58,10 +59,10 @@ class ManageTasks():
         self.savedb()
     
     def delete(self):
-        for index,delTask in enumerate(self.db):
-            print delTask.add
-            if delTask.add == self.task.delete:
+        for index,delTask in enumerate(self.db):    
+            if self.task.delete in delTask.add:
                 del self.db[index]
+                self.delete()          ##function must be recursive to update self.db indexes
 
     def edit(self):
         pass
