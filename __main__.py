@@ -22,8 +22,10 @@ def main():
             help="Remove a task from your ToDo list")
     taskAction.add_argument("--reminder", "-r", \
             help="Set a reminder for your task")
-    taskAction.add_argument("--list", "-l", \
-            help="Set a reminder for your task", default=False, action="store_true")
+    taskAction.add_argument("--list", "-l", default=False, action='store_true', \
+            help="See persisted ttasks")
+    taskAction.add_argument("--get", "-g", \
+            help="See more detailed infoamtion of a specific task")
     taskAction.add_argument("--edit", "-e", \
             help="Edit the infomation stored for the task")
     taskAction.add_argument("--description", "-s", \
@@ -52,7 +54,6 @@ class ManageTasks():
         self.opendb()
         self.task = task
         self.actionSwitch()
-
 	
     def opendb(self):
         """
@@ -80,10 +81,12 @@ class ManageTasks():
             self.new()
         if self.task.delete != None:
             self.delete()
-        if self.task.list != None:
+        if self.task.list != False:
             self.list()
         if self.task.edit != None:
             self.edit()
+        if self.task.get != None:
+            self.get()
 
     def new(self):
         """
@@ -109,7 +112,6 @@ class ManageTasks():
             if self.task.edit in editTask.add:
                 with tempfile.NamedTemporaryFile(mode='r+w+b',delete=False) as temp:
                     temp.write(editTask.add + "\n\n" + editTask.description)
-                    temp.flush()
                     temp.close()
                     if os.path.isfile(temp.name):
                         subprocess.call('vi '+temp.name,shell=True)
@@ -117,20 +119,31 @@ class ManageTasks():
                 with open(temp.name,"rb") as temp:
                     viDescription = ""
                     for line_number,line in enumerate(temp):
-                        print line_number," ", line
                         if line_number == 0:
                             editTask.add = line[:-1]
                         if line_number >= 2:
                             viDescription = viDescription+line
                             editTask.description = viDescription
-                    print editTask.description
         self.savedb()
 
     def list(self):
         """
         Method for viewing tasks in the instance db
         """
-    	print [listTask.add for listTask in self.db]
+        for index,listTask in enumerate(self.db):
+            print index+1,". ", listTask.add
+
+    def get(self):
+        """
+        Method to see specific infomation about a persisted task
+        """
+        for index,getTask in enumerate(self.db):    
+            if self.task.get in getTask.add:
+                print "\n"
+                print "Task: ", getTask.add
+                print "DB Number: ", index+1
+                print "Created: ", getTask.create_time
+                print "Description: ", getTask.description
 
     def __del__(self):
         """
@@ -153,13 +166,14 @@ class Task():
         Initilisation function of the Task Class, where the required varibles 
         are defined
         """
-        self.create_time = datetime.datetime.time(datetime.datetime.now())
+        self.create_time = str(datetime.datetime.now())
         self.add = classargs.add
         self.delete = classargs.delete
         self.reminder = classargs.reminder
         self.list = classargs.list
         self.edit = classargs.edit
         self.description = classargs.description
+        self.get = classargs.get
 
 if __name__ == "__main__":
     main()
