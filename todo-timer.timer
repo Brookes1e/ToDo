@@ -2,7 +2,7 @@
 Description=1min timer
 
 [Timer]
-OnUnitActiveSec=900
+OnUnitActiveSec=3600
 Unit=timer-1min.service
 
 [Install]
