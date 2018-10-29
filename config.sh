@@ -9,6 +9,8 @@ cp todo-timer.timer /etc/systemd/system/
 systemctl enable todo-timer.service
 systemctl enable todo-timer.timer
 
-
 systemctl start todo-timer.service
 systemctl start todo-timer.timer
+
+systemctl daemon-reload
+
