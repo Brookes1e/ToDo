@@ -5,15 +5,17 @@ import datetime
 import subprocess
 import pickle
 import os.path
-import regex
+import time 
 import pdb
+import tempfile
 
 storageFile = "./tasks.pkl"
 
 
 def main():
     taskAction = argparse.ArgumentParser(description="Select an action for Todo")
-#    taskAction.add_mutually_exclusive_group(required=True)
+    
+    #----Action Arguments----#
     taskAction.add_argument("--add", "-a", \
             help="Add a task to your ToDo list")
     taskAction.add_argument("--delete", "-d", \
@@ -22,6 +24,11 @@ def main():
             help="Set a reminder for your task")
     taskAction.add_argument("--list", "-l", \
             help="Set a reminder for your task", default=False, action="store_true")
+    taskAction.add_argument("--edit", "-e", \
+            help="Edit the infomation stored for the task")
+    taskAction.add_argument("--description", "-s", \
+            help="Set a description for the task", type=str, default="")
+    
     args = taskAction.parse_args()
     
     task = Task(args)
@@ -75,6 +82,8 @@ class ManageTasks():
             self.delete()
         if self.task.list != None:
             self.list()
+        if self.task.edit != None:
+            self.edit()
 
     def new(self):
         """
@@ -96,7 +105,26 @@ class ManageTasks():
         """
         Method for editing tasks from the instance db
         """
-        pass
+        for index,editTask in enumerate(self.db):    
+            if self.task.edit in editTask.add:
+                with tempfile.NamedTemporaryFile(mode='r+w+b',delete=False) as temp:
+                    temp.write(editTask.add + "\n\n" + editTask.description)
+                    temp.flush()
+                    temp.close()
+                    if os.path.isfile(temp.name):
+                        subprocess.call('vi '+temp.name,shell=True)
+                
+                with open(temp.name,"rb") as temp:
+                    viDescription = ""
+                    for line_number,line in enumerate(temp):
+                        print line_number," ", line
+                        if line_number == 0:
+                            editTask.add = line[:-1]
+                        if line_number >= 2:
+                            viDescription = viDescription+line
+                            editTask.description = viDescription
+                    print editTask.description
+        self.savedb()
 
     def list(self):
         """
@@ -130,6 +158,8 @@ class Task():
         self.delete = classargs.delete
         self.reminder = classargs.reminder
         self.list = classargs.list
+        self.edit = classargs.edit
+        self.description = classargs.description
 
 if __name__ == "__main__":
     main()
