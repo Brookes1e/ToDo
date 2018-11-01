@@ -3,6 +3,8 @@
 # Run this script as root to set-up timer reminder
 # funtionality
 
+cp ./reminder.sh /usr/bin/reminder.sh
+
 cp todo-timer.service /etc/systemd/system/
 cp todo-timer.timer /etc/systemd/system/
 

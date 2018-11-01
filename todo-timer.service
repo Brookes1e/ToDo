@@ -1,7 +1,7 @@
 [Unit]
 
 [Service]
-ExecStart=/usr/bin/wall -n "hellllloo" 
+ExecStart=/usr/bin/reminder.sh
 
 [Install]
 WantedBy=default.target

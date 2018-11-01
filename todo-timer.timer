@@ -1,9 +1,8 @@
 [Unit]
-Description=1min timer
+Description=5min timer
 
 [Timer]
-OnUnitActiveSec=3600
-Unit=timer-1min.service
+OnUnitActiveSec=60
 
 [Install]
 WantedBy=basic.target 
