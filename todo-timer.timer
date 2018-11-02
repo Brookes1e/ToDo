@@ -2,7 +2,7 @@
 Description=5min timer
 
 [Timer]
-OnUnitActiveSec=60
+OnUnitActiveSec=1200
 
 [Install]
 WantedBy=basic.target 
