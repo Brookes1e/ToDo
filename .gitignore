@@ -4,6 +4,7 @@ todo.sublime-project
 todo.sublime-workspace
 credentials.json
 token.json
+.tasks.pkl.old
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
